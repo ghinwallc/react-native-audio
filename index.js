@@ -9,9 +9,9 @@ import ReactNative, {
   Platform,
 } from 'react-native';
 
-var AudioRecorderManager = NativeModules.AudioRecorderManager;
+const AudioRecorderManager = NativeModules.AudioRecorderManager;
 
-var AudioRecorder = {
+const AudioRecorder = {
   prepareRecordingAtPath: function(path, options) {
     if (this.progressSubscription) this.progressSubscription.remove();
     this.progressSubscription = NativeAppEventEmitter.addListener(
@@ -33,7 +33,7 @@ var AudioRecorder = {
       }
     );
 
-    var defaultOptions = {
+    const defaultOptions = {
       SampleRate: 44100.0,
       Channels: 2,
       AudioQuality: 'High',
@@ -43,7 +43,7 @@ var AudioRecorder = {
       AudioEncodingBitRate: 32000,
     };
 
-    var recordingOptions = { ...defaultOptions, ...options };
+    const recordingOptions = { ...defaultOptions, ...options };
 
     if (Platform.OS === 'ios') {
       return AudioRecorderManager.prepareRecordingAtPath(
