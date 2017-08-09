@@ -13,7 +13,10 @@ const AudioRecorderManager = NativeModules.AudioRecorderManager;
 
 const AudioRecorder = {
   prepareRecordingAtPath: function(path, options) {
-    if (this.progressSubscription) this.progressSubscription.remove();
+    if (this.progressSubscription) {
+        this.progressSubscription.remove();
+    }
+
     this.progressSubscription = NativeAppEventEmitter.addListener(
       'recordingProgress',
       data => {
@@ -23,7 +26,10 @@ const AudioRecorder = {
       }
     );
 
-    if (this.finishedSubscription) this.finishedSubscription.remove();
+    if (this.finishedSubscription) {
+        this.finishedSubscription.remove();
+    }
+
     this.finishedSubscription = NativeAppEventEmitter.addListener(
       'recordingFinished',
       data => {
@@ -61,15 +67,9 @@ const AudioRecorder = {
       );
     }
   },
-  startRecording: function() {
-    return AudioRecorderManager.startRecording();
-  },
-  pauseRecording: function() {
-    return AudioRecorderManager.pauseRecording();
-  },
-  stopRecording: function() {
-    return AudioRecorderManager.stopRecording();
-  },
+  startRecording: AudioRecorderManager.startRecording,
+  pauseRecording: AudioRecorderManager.pauseRecording,
+  stopRecording: AudioRecorderManager.stopRecording,
   checkAuthorizationStatus: AudioRecorderManager.checkAuthorizationStatus,
   requestAuthorization: AudioRecorderManager.requestAuthorization,
   removeListeners: function() {
