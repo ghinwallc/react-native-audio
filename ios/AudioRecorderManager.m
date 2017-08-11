@@ -90,7 +90,7 @@ RCT_EXPORT_MODULE();
   return basePath;
 }
 
-RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)sampleRate channels:(nonnull NSNumber *)channels quality:(NSString *)quality encoding:(NSString *)encoding meteringEnabled:(BOOL)meteringEnabled resolve:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)sampleRate channels:(nonnull NSNumber *)channels quality:(NSString *)quality encoding:(NSString *)encoding meteringEnabled:(BOOL)meteringEnabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
   _prevProgressUpdateTime = nil;
   [self stopProgressTimer];
@@ -176,23 +176,23 @@ RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)samp
   _audioRecorder.delegate = self;
 
   if (error) {
-      NSLog(@"error: %@", [error localizedDescription]);
-      reject(@"error: %@", [error localizedDescription]);
+      reject(@"RNAudio", [error localizedDescription], error);
     } else {
       [_audioRecorder prepareToRecord];
       resolve([_audioFileURL path]);
   }
 }
 
-RCT_EXPORT_METHOD(startRecording:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
+RCT_EXPORT_METHOD(startRecording:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
   if (!_audioRecorder.recording) {
     [self startProgressTimer];
     [_recordSession setActive:YES error:nil];
     [_audioRecorder record];
     resolve([_audioFileURL path]);
+  } else {
+    reject(@"RNAudio", @"Please call stopRecording before starting recording", NULL);
   }
-    reject(@"INVALID_STATE", @"Please call stopRecording before starting recording"));
 }
 
 RCT_EXPORT_METHOD(stopRecording:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
