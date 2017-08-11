@@ -9,8 +9,8 @@ Pod::Spec.new do |s|
   s.description    = package['description']
   s.license        = package['license']
   s.author         = package['author']
-  s.homepage       = 'https://github.com/jsierles/react-native-audio'
-  s.source         = { :git => 'https://github.com/jsierles/react-native-audio', :tag => s.version }
+  s.homepage       = 'https://github.com/ghinwallc/react-native-audio'
+  s.source         = { :git => 'https://github.com/ghinwallc/react-native-audio', :tag => s.version }
 
   s.requires_arc   = true
   s.platform       = :ios, '8.0'
