@@ -1,0 +1,18 @@
+// @flow
+
+declare export type AudioRecorder = {
+    prepareRecordingAtPath(): Promise<any>,
+    startRecording(): Promise<any>,
+    pauseRecording(): Promise<any>,
+    stopRecording(): Promise<any>,
+    checkAuthorizationStatus(): Promise<any>,
+    requestAuthorization(): Promise<any>,
+    removeListeners(): void
+}
+
+declare export type AudioUtils  = {
+    MainBundlePath: string,
+    CachesDirectoryPath: string,
+    DocumentDirectoryPath: string,
+    LibraryDirectoryPath: string,
+};

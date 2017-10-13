@@ -3,6 +3,8 @@
 //  AudioRecorderManager
 //
 //  Created by Joshua Sierles on 15/04/15.
+//  with contributions from https://github.com/jsierles/react-native-audio/graphs/contributors
+
 //  Copyright (c) 2015 Joshua Sierles. All rights reserved.
 //
 
@@ -88,7 +90,7 @@ RCT_EXPORT_MODULE();
   return basePath;
 }
 
-RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)sampleRate channels:(nonnull NSNumber *)channels quality:(NSString *)quality encoding:(NSString *)encoding meteringEnabled:(BOOL)meteringEnabled)
+RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)sampleRate channels:(nonnull NSNumber *)channels quality:(NSString *)quality encoding:(NSString *)encoding meteringEnabled:(BOOL)meteringEnabled resolve:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
   _prevProgressUpdateTime = nil;
   [self stopProgressTimer];
@@ -174,35 +176,39 @@ RCT_EXPORT_METHOD(prepareRecordingAtPath:(NSString *)path sampleRate:(float)samp
   _audioRecorder.delegate = self;
 
   if (error) {
-      NSLog(@"error: %@", [error localizedDescription]);
-      // TODO: dispatch error over the bridge
+      reject(@"RNAudio", [error localizedDescription], error);
     } else {
       [_audioRecorder prepareToRecord];
+      resolve([_audioFileURL path]);
   }
 }
 
-RCT_EXPORT_METHOD(startRecording)
+RCT_EXPORT_METHOD(startRecording:(RCTPromiseResolveBlock)resolve reject:(RCTPromiseRejectBlock)reject)
 {
   if (!_audioRecorder.recording) {
     [self startProgressTimer];
     [_recordSession setActive:YES error:nil];
     [_audioRecorder record];
-
+    resolve([_audioFileURL path]);
+  } else {
+    reject(@"RNAudio", @"Please call stopRecording before starting recording", NULL);
   }
 }
 
-RCT_EXPORT_METHOD(stopRecording)
+RCT_EXPORT_METHOD(stopRecording:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
 {
   [_audioRecorder stop];
   [_recordSession setActive:NO error:nil];
   _prevProgressUpdateTime = nil;
+  resolve([_audioFileURL path]);
 }
 
-RCT_EXPORT_METHOD(pauseRecording)
+RCT_EXPORT_METHOD(pauseRecording:(RCTPromiseResolveBlock)resolve reject:(__unused RCTPromiseRejectBlock)reject)
 {
   if (_audioRecorder.recording) {
     [self stopProgressTimer];
     [_audioRecorder pause];
+    resolve([_audioFileURL path]);
   }
 }
 

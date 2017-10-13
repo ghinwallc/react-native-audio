@@ -1,20 +1,14 @@
-Record audio in iOS or Android React Native apps.
+# @interpals/react-native-audio
 
-## BREAKING CHANGES
-
-For React Native >= 0.40, use v3.1.0 and up.
-For React Native <= 0.39, use v3.0.0 or lower.
-
-v3.x removed playback support in favor of using more mature libraries like [react-native-sound](https://github.com/zmxv/react-native-sound). If you need to play
-from the network, please submit a PR to that project or try `react-native-video`.
+> Record audio in iOS or Android React Native apps.
 
 ### Installation
 
 Install the npm package and link it to your project:
 
 ```
-npm install react-native-audio --save
-react-native link react-native-audio
+npm install @interpals/react-native-audio --save
+react-native link @interpals/react-native-audio
 ```
 
 On *iOS* you need to add a usage description to `Info.plist`:
